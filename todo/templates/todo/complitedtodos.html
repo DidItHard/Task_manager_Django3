@@ -7,15 +7,17 @@
 </head>
 <body>
     {% block content %}
-    <h1>Current</h1>
+    <h1>Complited</h1>
     <ul>
         {% for todo in todos %}
             <li>
                 {% if todo.important %}<b>{% endif %}
                 <a href="{% url 'viewtodo' todo.id %}">
                     {{todo.title}}
-                    {% if todo.important %}</b>{% endif %}
-                    {% if todo.decription %} - {{ todo.decription }}{% endif %}
+
+                {% if todo.important %}</b>{% endif %}
+                {% if todo.decription %} - {{ todo.decription }}{% endif %}
+                {{ todo.datecomplited|date:'M j Y H:i' }}
                 </a>
             </li>
 

@@ -5,8 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-Logged in as {{ user.username }}
+
 {% if user.is_authenticated %}
+    Logged in as {{ user.username }}
+    <a href="{% url 'createtodo' %}">Create</a>
+    <a href="{% url 'currenttodos' %}">Current</a>
+    <a href="{% url 'complitedtodos' %}">Complited</a>
     <form action="{% url 'logoutuser' %}" method="POST">
         {% csrf_token %}
 <!--        {{ form.as_p }}-->
