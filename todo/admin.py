@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import ToDo
+from .models import Todo
 
 class TodoAdmin(admin.ModelAdmin):
-    readonly_fields = ('creation_date', )
+    readonly_fields = ('created',)
 
-# Register your models here.
-admin.site.register(ToDo, TodoAdmin)
+admin.site.register(Todo, TodoAdmin)
