@@ -9,7 +9,7 @@ Logged in as {{ user.username }}
 {% if user.is_authenticated %}
     <form action="{% url 'logoutuser' %}" method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
+<!--        {{ form.as_p }}-->
         <button type="submit">Log out</button>
     </form>
 

@@ -1,8 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
+from .forms import TodoForm
+from .models import ToDo
+
 
 # Create your views here.
 def home(request):
@@ -27,7 +30,8 @@ def signupuser(request):
             return render(request, 'todo/signupuser.html', {"form": UserCreationForm(), 'error': 'Password did not match, dumbass'})
 
 def currenttodos(request):
-    return render(request, 'todo/currenttodos.html')
+    todos = ToDo.objects.filter(creator=request.user, datecomplited__isnull=True)
+    return render(request, 'todo/currenttodos.html', {'todos': todos})
 
 def logoutuser(request):
     if request.method == 'POST':
@@ -45,3 +49,28 @@ def loginuser(request):
             login(request, user)
             return redirect('currenttodos')
 
+def createtodo(request):
+    if request.method == 'GET':
+        return render(request, 'todo/createtodo.html', {"form": TodoForm()})
+    else:
+        try:
+            form = TodoForm(request.POST)
+            newtodo = form.save(commit=False)
+            newtodo.creator = request.user
+            newtodo.save()
+            return redirect('currenttodos')
+        except ValueError:
+            return render(request, 'todo/createtodo.html', {"form": TodoForm(), 'error': 'Bad data passed in'})
+
+def viewtodo(request, todo_pk):
+    todo = get_object_or_404(ToDo, pk=todo_pk, creator=request.user)
+    if request.method == 'GET':
+        form = TodoForm(instance=todo)
+        return render(request, 'todo/detail.html', {'todo': todo, 'form': form})
+    else:
+        try:
+            form = TodoForm(request.POST, instance=todo)
+            form.save()
+            return redirect('currenttodos')
+        except ValueError:
+            return render(request, 'todo/detail.html', {'todo': todo, 'form': form, 'error':'bad info'})

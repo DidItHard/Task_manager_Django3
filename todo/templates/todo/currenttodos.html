@@ -6,8 +6,21 @@
     <title>Title</title>
 </head>
 <body>
-    {% block content%}
+    {% block content %}
     <h1>Current</h1>
+    <ul>
+        {% for todo in todos %}
+            <li>
+                {% if todo.important %}<b>{% endif %}
+                <a href="{% url 'viewtodo' todo.id %}">
+                    {{todo.title}}
+                </a>
+                {% if todo.important %}</b>{% endif %}
+                {% if todo.decription %} - {{ todo.decription }}{% endif %}
+            </li>
+
+        {% endfor %}
+    </ul>
 
     {% endblock %}
 </body>

@@ -6,6 +6,7 @@ class ToDo(models.Model):
     title = models.CharField(max_length=200, default='< no title >')
     decription = models.TextField(blank=True)
     creation_date = models.DateField(auto_now_add=True)
+    datecomplited = models.DateTimeField(null=True, blank=True)
     # importance = (
     #     ('High', 'It\'s important'),
     #     ('Common', 'Common task'),
